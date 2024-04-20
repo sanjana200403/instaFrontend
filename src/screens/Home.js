@@ -7,13 +7,10 @@ import { toast } from 'react-toastify'
 
 const Home = () => {
   var picLink = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK5xOqrU8FSzOWqq0PdYzn793sx4d33qcOXZtt-oEdZA&s"
-  const [loadig,setLoading] = useState(false)
   const [data,setData] = useState([])
   const [comment,setComment] = useState("")
 const [show,setShow] = useState(false)
 const [item ,setItem] = useState([])
-let limit = 10
-let skip = 0
 
 
   const navigate = useNavigate()
@@ -35,39 +32,24 @@ let skip = 0
     if(!token){
 navigate("/signin")
 }
-fetchPosts()
-window.addEventListener("scroll",handleScroll)
-return ()=>{
-  window.removeEventListener("scroll",handleScroll)
-}
 
-  },[])
-const handleScroll = ()=>{
-  if(document.documentElement.clientHeight + window.pageYOffset >= document.documentElement.scrollHeight){
-    skip = skip +10
-    fetchPosts()
-  }
 
-}
 
-  // ======fetching all the posts=====
-
-const fetchPosts =()=>{
-
-  fetch(`https://instaclone-ball.onrender.com/allposts?limit=${limit}&skip=${skip}`,{
+// ======fetching all the posts=====
+fetch("http://localhost:5000/allposts",{
   headers:{
    
     "Authorization":"Bearer "+ localStorage.getItem("jwtInsta")
   }
 }).then((res)=>res.json())
 .then((result)=>{
- 
-   setData((data)=>[...data,...result])
+   setData(result)
   console.log(result,"ALL POSTS DATA!!")
   })
 .catch((err)=>console.log(err))
-}
 
+
+  },[])
   // =========to show and hide comments======
   const toggleComment = (posts)=>{
     if(show){
@@ -81,7 +63,7 @@ const fetchPosts =()=>{
   }
   // ====== FUNCTION FOR LIKE POST ======
 const likePost = (id)=>{
-fetch("https://instaclone-ball.onrender.com/like",{
+fetch("http://localhost:5000/like",{
   method:"put",
   headers:{
     "Content-Type":"application/json",
@@ -106,7 +88,7 @@ fetch("https://instaclone-ball.onrender.com/like",{
 }
 // ========== FUNCTION FOR UNLIKE POST =====
 const unlikePost = (id)=>{
-  fetch("https://instaclone-ball.onrender.com/unlike",{
+  fetch("http://localhost:5000/unlike",{
     method:"put",
     headers:{
       "Content-Type":"application/json",
@@ -130,7 +112,7 @@ const unlikePost = (id)=>{
   // ========= FUNCTION FOR COMMENT ON A POST ===
   const makeComment = (text,id)=>{
     console.log(comment,"comment input")
-    fetch("https://instaclone-ball.onrender.com/comment",{
+    fetch("http://localhost:5000/comment",{
       method:"put",
       headers:{
         "Content-Type":"application/json",
@@ -158,13 +140,6 @@ const unlikePost = (id)=>{
       })
     .catch((err)=>console.log(err))
 
-    }
-    if(loadig){
-      return(
-       <>
-        <h1 style={{textAlign:'center'}}> Loading ....</h1>
-        </>
-      )
     }
   return (
     <div className='home'>
