@@ -90,7 +90,7 @@ console.log("ERROR IN DELETING POST",err)
           {/* card header */}
    <div className="card-header" style={{borderBottom:"1px solid #00000029"}}>
     <div className="card-pic">
-      <img src={item?.postedBy?.photo} alt="" />
+      <img src={item?.postedBy?.Photo} alt="" />
     </div>
     <h5>{item?.postedBy?.name}</h5>
     <div className="deletePost" 
